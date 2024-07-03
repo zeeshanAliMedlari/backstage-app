@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backstage-config
+data:
+  APP_CONFIG_app_baseUrl: http://backstage.default.svc.cluster.local
+  APP_CONFIG_backend_baseUrl: http://backstage.default.svc.cluster.local/api
+  APP_CONFIG_backend_database_client: pg
+  APP_CONFIG_backend_database_connection: postgres://backstage:backstagepassword@postgres:5432/backstage

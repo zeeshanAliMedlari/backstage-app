@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: backstage
+spec:
+  serviceName: backstage
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage
+    spec:
+      containers:
+      - name: backstage
+        image: zeeshanmedlari/backstage:latest
+        ports:
+        - containerPort: 7000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: DATABASE_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              name: backstage-config
+              key: APP_CONFIG_backend_database_client
+        - name: DATABASE_CONNECTION
+          valueFrom:
+            configMapKeyRef:
+              name: backstage-config
+              key: APP_CONFIG_backend_database_connection
+        volumeMounts:
+        - name: backstage-volume
+          mountPath: /app
+  volumeClaimTemplates:
+  - metadata:
+      name: backstage-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
